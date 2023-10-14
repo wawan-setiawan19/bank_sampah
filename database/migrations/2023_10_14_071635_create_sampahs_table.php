@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sampahs', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('jenis_sampaj');
+            $table->string('jenis_sampah');
             $table->string('deskripsi');
             $table->integer('harga');
             $table->string('foto');

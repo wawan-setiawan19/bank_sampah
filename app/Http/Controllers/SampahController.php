@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Sampah;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SampahController extends Controller
 {
@@ -17,6 +18,7 @@ class SampahController extends Controller
         return Inertia::render('DataSampah',[
             'dataSampah' => $dataSampah,
             'title' => 'Data Master Sampah',
+            'assetPath' => asset('storage/sampah/')
         ]);
     }
 
@@ -25,7 +27,7 @@ class SampahController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -33,7 +35,34 @@ class SampahController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'jenis_sampah' => 'required|string|max:255',
+            'deskripsi' => 'required|string|max:255',
+            'harga' => 'required|integer|not_in:0',
+            'foto' => ['image'],
+        ]);
+
+        if ($request->foto->isValid()) {
+            $file = $request->foto;
+            $fileName = date('Y-m-d').$file->getClientOriginalName();
+            $path = 'sampah/'.$fileName;
+            Storage::disk('public')->put($path,file_get_contents($file));
+            // dd($path);
+            $sampah = Sampah::create([
+                'jenis_sampah' => $request->jenis_sampah,
+                'deskripsi' => $request->deskripsi,
+                'harga' => $request->harga,
+                'foto' => $fileName,
+            ]);
+        }else{
+            $sampah = Sampah::create([
+                'jenis_sampah' => $request->jenis_sampah,
+                'deskripsi' => $request->deskripsi,
+                'harga' => $request->harga,
+                'foto' => 'not image',
+            ]);
+        }
+        return redirect(route('sampah'));
     }
 
     /**

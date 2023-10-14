@@ -2,7 +2,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import Create from './Sampah/Create';
 
-export default function DataSampah({ auth, title }) {
+export default function DataSampah({ auth, title, dataSampah, assetPath }) {
+    console.log(assetPath);
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -26,13 +27,15 @@ export default function DataSampah({ auth, title }) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td className='border p-2'>1</td>
-                                    <td className='border p-2'>Plastik</td>
-                                    <td className='border p-2'>Sampah ini banyak dijumpai di kota besar</td>
-                                    <td className='border p-2'>Rp. 3.000</td>
+                                {dataSampah && dataSampah.map((sampah, index)=>{
+                                    return(
+                                    <tr key={sampah.id}>
+                                    <td className='border p-2'>{index+1}</td>
+                                    <td className='border p-2'>{sampah.jenis_sampah}</td>
+                                    <td className='border p-2'>{sampah.deskripsi}</td>
+                                    <td className='border p-2'>Rp. {sampah.harga}</td>
                                     <td className='border p-2'>
-                                        <img src="https://unsplash.com/photos/-4bD2p5zbdA/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTR8fHBsYXN0aWt8ZW58MHx8fHwxNjk3MjY5Mjg4fDA&force=true&w=1920" alt="" />
+                                        <img src={assetPath+'/'+sampah.foto} alt="" />
                                     </td>
                                     <td className='border p-2'>
                                         <div className="flex">
@@ -41,21 +44,8 @@ export default function DataSampah({ auth, title }) {
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td className='border p-2'>1</td>
-                                    <td className='border p-2'>Plastik</td>
-                                    <td className='border p-2'>Sampah ini banyak dijumpai di kota besar</td>
-                                    <td className='border p-2'>Rp. 3.000</td>
-                                    <td className='border p-2'>
-                                        <img src="https://unsplash.com/photos/-4bD2p5zbdA/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTR8fHBsYXN0aWt8ZW58MHx8fHwxNjk3MjY5Mjg4fDA&force=true&w=1920" alt="" />
-                                    </td>
-                                    <td className='border p-2'>
-                                        <div className="flex">
-                                            <div className="btn btn-warning mx-2">Edit</div>
-                                            <div className="btn btn-error mx-2">Hapus</div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    )
+                                })}
                             </tbody>
                         </table>
                     </div>

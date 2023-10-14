@@ -1,132 +1,100 @@
-import InputError from '@/Components/InputError'
-import InputLabel from '@/Components/InputLabel'
-import TextInput from '@/Components/TextInput'
-import { Transition } from '@headlessui/react'
-import { useForm, usePage } from '@inertiajs/react'
-import React from 'react'
+import { useEffect } from 'react';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import InputError from '@/Components/InputError';
+import InputLabel from '@/Components/InputLabel';
+import PrimaryButton from '@/Components/PrimaryButton';
+import TextInput from '@/Components/TextInput';
+import FileInput from '@/Components/FileInput';
+import { Head, Link, useForm } from '@inertiajs/react';
 
-
-const Create = ({ className }) => {
-    const user = usePage().props.auth.user
-    const { data, setData, errors, post, processing, recentlySuccessful } = useForm({
-        id_pemilik: user.id,
-        merk: '',
-        tipe: '',
-        tahun: '',
-        bahan_bakar: 'Bensin',
-        transmisi: 'Automatic',
-        nopol: '',
-        picture: '',
+export default function Create({isVisible}) {
+    const { data, setData, post, processing, errors, reset } = useForm({
+        jenis_sampah: '',
+        deskripsi: '',
+        harga: '',
+        foto: '',
     });
 
     const submit = (e) => {
-        e.preventDefault();
-
+        e.preventDefault()
         post(route('sampah.store'));
+        isVisible(false)
     };
+
     return (
-            <form onSubmit={submit} className="mt-6 space-y-6">
+            <form onSubmit={submit}>
                 <div>
-                    <InputLabel htmlFor="id_pemilik" value="Id Pemilik" />
+                    <InputLabel htmlFor="jenis_sampah" value="Jenis Sampah" />
 
                     <TextInput
-                        id="id_pemilik"
+                        id="jenis_sampah"
+                        name="jenis_sampah"
+                        value={data.jenis_sampah}
                         className="mt-1 block w-full"
-                        value={data.id_pemilik}
-                        onChange={(e) => setData('id_pemilik', e.target.value)}
+                        autoComplete="jenis_sampah"
+                        isFocused={true}
+                        onChange={(e) => setData('jenis_sampah', e.target.value)}
                         required
-                        isFocused
-                        disabled
                     />
 
-                    <InputError className="mt-2" message={errors.id_pemilik} />
+                    <InputError message={errors.jenis_sampah} className="mt-2" />
                 </div>
-                <div>
-                    <InputLabel htmlFor="merk" value="Merk" />
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="deskripsi" value="Deskripsi" />
 
                     <TextInput
-                        id="merk"
+                        id="deskripsi"
+                        name="deskripsi"
+                        value={data.deskripsi}
                         className="mt-1 block w-full"
-                        value={data.merk}
-                        onChange={(e) => setData('merk', e.target.value)}
+                        autoComplete="deskripsi"
+                        isFocused={true}
+                        onChange={(e) => setData('deskripsi', e.target.value)}
                         required
-                        isFocused
                     />
 
-                    <InputError className="mt-2" message={errors.merk} />
+                    <InputError message={errors.deskripsi} className="mt-2" />
                 </div>
-                <div>
-                    <InputLabel htmlFor="tipe" value="Tipe" />
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="harga" value="Harga" />
 
                     <TextInput
-                        id="tipe"
+                        id="harga"
+                        name="harga"
+                        value={data.harga}
                         className="mt-1 block w-full"
-                        value={data.tipe}
-                        onChange={(e) => setData('tipe', e.target.value)}
+                        autoComplete="harga"
+                        isFocused={true}
+                        onChange={(e) => setData('harga', e.target.value)}
                         required
-                        isFocused
                     />
 
-                    <InputError className="mt-2" message={errors.tipe} />
+                    <InputError message={errors.harga} className="mt-2" />
                 </div>
-                <div>
-                    <InputLabel htmlFor="tahun" value="Tahun" />
 
-                    <TextInput
-                        id="tahun"
-                        className="mt-1 block w-full"
-                        value={data.tahun}
-                        onChange={(e) => setData('tahun', e.target.value)}
-                        required
-                        isFocused
-                    />
-
-                    <InputError className="mt-2" message={errors.tahun} />
-                </div>
-                <div>
-                    <InputLabel htmlFor="nopol" value="No Polisi" />
-
-                    <TextInput
-                        id="nopol"
-                        className="mt-1 block w-full"
-                        value={data.nopol}
-                        onChange={(e) => setData('nopol', e.target.value)}
-                        required
-                        isFocused
-                    />
-
-                    <InputError className="mt-2" message={errors.nopol} />
-                </div>
-                <div>
-                    <InputLabel htmlFor="picture" value="Gambar Mobil" />
+                <div className="mt-4">
+                    <InputLabel htmlFor="foto" value="Foto" />
 
                     <FileInput
                         className="mt-1 block w-full"
-                        name="picture"
+                        name="foto"
                         accept="image/*"
-                        errors={errors.picture}
-                        value={data.picture}
-                        onChange={picture => setData('picture', picture)}
+                        errors={errors.foto}
+                        value={data.foto}
+                        onChange={foto => setData('foto', foto)}
                     />
 
-                    <InputError className="mt-2" message={errors.picture} />
+                    <InputError message={errors.foto} className="mt-2" />
                 </div>
 
-                <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
+                <div className="flex items-center justify-end mt-4">
 
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600">Saved.</p>
-                    </Transition>
+                    <PrimaryButton className="ml-4" disabled={processing}>
+                        Tambah DAta
+                    </PrimaryButton>
                 </div>
             </form>
-    )
+    );
 }
-
-export default Create

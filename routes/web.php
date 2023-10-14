@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/sampah', [SampahController::class, 'index'])->name('sampah');
+    Route::post('/sampah', [SampahController::class, 'store'])->name('sampah.store');
 });
 
 require __DIR__.'/auth.php';
