@@ -56,7 +56,7 @@ export default function DataSampah({ auth, title, dataSampah, assetPath }) {
                                             </td>
                                             <td className='border p-2'>
                                                 <div className="flex">
-                                                    <div className="btn btn-warning mx-2">Edit</div>
+                                                    <Link href={route('sampah.edit', sampah.id)} className="btn btn-warning mx-2">Edit</Link>
                                                     <div className="btn btn-error mx-2" onClick={() => handleDelete(sampah)}>Hapus</div>
                                                 </div>
                                             </td>

@@ -78,17 +78,48 @@ class SampahController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Sampah $sampah)
+    public function edit($id)
     {
-        //
+        $sampah = Sampah::find($id);
+        return Inertia::render('Sampah/Edit',[
+            'sampah' => $sampah
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Sampah $sampah)
+    public function update(Request $request, $id)
     {
-        //
+        $sampah = Sampah::find($id);
+        $request->validate([
+            'jenis_sampah' => 'required|string|max:255',
+            'deskripsi' => 'required|string|max:255',
+            'harga' => 'required|integer|not_in:0',
+        ]);
+
+        if ($request->hasFile('foto')) {
+            Storage::delete('public/sampah/'.$sampah->foto);
+            $file = $request->foto;
+            $fileName = date('Y-m-d').$file->getClientOriginalName();
+            $path = 'sampah/'.$fileName;
+            Storage::disk('public')->put($path,file_get_contents($file));
+            // dd($path);
+            $sampah->update([
+                'jenis_sampah' => $request->jenis_sampah,
+                'deskripsi' => $request->deskripsi,
+                'harga' => $request->harga,
+                'foto' => $fileName,
+            ]);
+        }else{
+            $sampah->update([
+                'jenis_sampah' => $request->jenis_sampah,
+                'deskripsi' => $request->deskripsi,
+                'harga' => $request->harga,
+            ]);
+        }
+        $sampah->save();
+        return redirect(route('sampah'));
     }
 
     /**

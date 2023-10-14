@@ -45,7 +45,9 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/sampah', [SampahController::class, 'index'])->name('sampah');
     Route::get('/sampah/create', [SampahController::class, 'create'])->name('sampah.create');
+    Route::get('/sampah/edit/{id}', [SampahController::class, 'edit'])->name('sampah.edit');
     Route::post('/sampah', [SampahController::class, 'store'])->name('sampah.store');
+    Route::post('/sampah/{id}', [SampahController::class, 'update'])->name('sampah.update');
     Route::delete('sampah/{id}', [SampahController::class, 'destroy'])->name('sampah.destroy');
 });
 
