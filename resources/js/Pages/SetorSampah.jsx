@@ -6,79 +6,85 @@ import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 import SelectInput from '@/Components/SelectInput';
 
-export default function Login({ sampah }) {
+export default function Login({ dataPenyetor }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        berat: 0,
-        jenis_sampah: '',
-        total_harga: 0
+        nama_penyetor: '',
+        alamat: '',
     });
-
-    const handleProcess = () => {
-        let total = data.berat * data.jenis_sampah
-        setData('total_harga', total)
-        console.log(total);
-    }
 
     const submit = (e) => {
         e.preventDefault();
-
-        post(route('login'));
+        post(route('setor.create'));
     };
 
     return (
         <GuestLayout>
             <Head title="Kalkulator" />
-
             <form onSubmit={submit}>
                 <div className="flex-col"></div>
                 <div>
-                    <InputLabel htmlFor="berat" value="Berat (kg)" />
+                    <InputLabel htmlFor="nama_penyetor" value="Nama Penyetor" />
 
                     <TextInput
-                        id="berat"
+                        id="nama_penyetor"
                         type="text"
-                        name="berat"
-                        value={data.berat}
+                        name="nama_penyetor"
+                        value={data.nama_penyetor}
                         className="mt-1 block w-full"
                         autoComplete="username"
                         isFocused={true}
-                        onChange={(e) => setData('berat', e.target.value)}
+                        onChange={(e) => setData('nama_penyetor', e.target.value)}
                     />
 
-                    <InputError message={errors.berat} className="mt-2" />
+                    <InputError message={errors.nama_penyetor} className="mt-2" />
                 </div>
+                <div className='mt-3'>
+                    <InputLabel htmlFor="alamat" value="Alamat Penyetor" />
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="jenis_sampah" value="Jenis Sampah" />
-
-                    <SelectInput
+                    <TextInput
+                        id="alamat"
+                        type="text"
+                        name="alamat"
+                        value={data.alamat}
                         className="mt-1 block w-full"
-                        name="jenis_sampah"
-                        errors={errors.jenis_sampah}
-                        value={data.jenis_sampah}
-                        onChange={e => {
-                            setData('jenis_sampah', e.target.value)
-                        }}>
-                        {sampah && sampah.map(item => {
-                            return (
-                                <option key={item.id} value={item.harga}>{item.jenis_sampah}</option>
-                            )
-                        })}
-                    </SelectInput>
+                        autoComplete="username"
+                        isFocused={true}
+                        onChange={(e) => setData('alamat', e.target.value)}
+                    />
 
-                    <InputError message={errors.jenis_sampah} className="mt-2" />
+                    <InputError message={errors.nama_penyetor} className="mt-2" />
                 </div>
 
                 <div className="flex items-center justify-end mt-4">
-                    <button className='btn btn-block btn-primary' onClick={e => handleProcess()}>Hitung</button>
+                    <button className='btn btn-block btn-primary'>Masuk ke Perhitungan</button>
                 </div>
             </form>
-
-            {data.total_harga &&
-                <div className='alert mt-3'>
-                    {data.total_harga}
-                </div>
-            }
+            <table id='myTable' className='w-full text-sm text-left text-gray-500 mt-3 dark:text-gray-400'>
+                <thead className='text-xs text-gray-700 uppercase dark:text-gray-400'>
+                    <tr>
+                        <th scope='col' className='border p-2'>No</th>
+                        <th scope='col' className='border p-2'>Nama Penyetor</th>
+                        <th scope='col' className='border p-2'>Alamat</th>
+                        <th scope='col' className='border p-2 w-2/12'>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {dataPenyetor && dataPenyetor.map((penyetor, index) => {
+                        return (
+                            <tr key={penyetor.id}>
+                                <td className='border p-2'>{index + 1}</td>
+                                <td className='border p-2'>{penyetor.nama_penyetor}</td>
+                                <td className='border p-2'>{penyetor.alamat}</td>
+                                <td className='border p-2'>
+                                    <div className="flex">
+                                        <Link href={route('setor.detail', penyetor.id)} className="btn btn-warning mx-2">Setor</Link>
+                                    </div>
+                                </td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+            </table>
         </GuestLayout>
     );
 }

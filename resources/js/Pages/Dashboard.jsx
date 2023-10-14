@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 
 export default function Dashboard({ auth }) {
     return (
@@ -18,7 +18,7 @@ export default function Dashboard({ auth }) {
                                 <div>
                                     <h1 className="text-5xl text-primary">Selamat datang, <span className='font-bold'>{auth.user.name}</span>!</h1>
                                     <p className="py-6">Mari kita tambah jenis kategori sampah, supaya teman-teman relawan kebersihan semakin paham tentang sampah yang mereka sumbang</p>
-                                    <button className="btn btn-primary btn-block">Tambah Sampah</button>
+                                    <Link href={route('sampah')} className="btn btn-primary btn-block">Tambah Sampah</Link>
                                 </div>
                             </div>
                         </div>

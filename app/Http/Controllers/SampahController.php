@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sampah;
+use App\Models\Penyetor;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -24,9 +25,9 @@ class SampahController extends Controller
 
     public function setor()
     {
-        $dataSampah = Sampah::all();
+        $dataPenyetor = Penyetor::all();
         return Inertia::render('SetorSampah',[
-            'sampah' => $dataSampah,
+            'dataPenyetor' => $dataPenyetor,
             'title' => 'Kalkulator',
         ]);
     }
@@ -140,5 +141,26 @@ class SampahController extends Controller
         $sampah->delete();
         // $mobil->delete();
         return redirect(route('sampah'));
+    }
+
+    public function penyetor(Request $request)
+    {
+        $request->validate([
+            'nama_penyetor' => 'required|string|max:255',
+            'alamat' => 'required|string|max:255',
+        ]);
+            $penyetor = Penyetor::create([
+                'nama_penyetor' => $request->nama_penyetor,
+                'alamat' => $request->alamat,
+            ]);
+        return redirect(route('setor.detail', $penyetor->id));
+    }
+    public function detail_setor($id){
+        $penyetor = Penyetor::find($id);
+        $sampah = Sampah::all();
+        return Inertia::render('DetailSetor',[
+            'penyetor' => $penyetor,
+            'sampah' => $sampah,
+        ]);
     }
 }

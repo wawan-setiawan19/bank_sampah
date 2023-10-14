@@ -37,6 +37,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/setor', [SampahController::class, 'setor'])->name('setor');
+Route::get('/setor/{id}', [SampahController::class, 'detail_setor'])->name('setor.detail');
+Route::post('/setor', [SampahController::class, 'penyetor'])->name('setor.create');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
