@@ -44,7 +44,9 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/sampah', [SampahController::class, 'index'])->name('sampah');
+    Route::get('/sampah/create', [SampahController::class, 'create'])->name('sampah.create');
     Route::post('/sampah', [SampahController::class, 'store'])->name('sampah.store');
+    Route::delete('sampah/{id}', [SampahController::class, 'destroy'])->name('sampah.destroy');
 });
 
 require __DIR__.'/auth.php';

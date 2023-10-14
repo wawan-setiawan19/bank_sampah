@@ -1,9 +1,25 @@
+import ConfirmationModal from '@/Components/ConfirmationModal';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
+import { useState } from 'react';
 import Create from './Sampah/Create';
 
 export default function DataSampah({ auth, title, dataSampah, assetPath }) {
-    console.log(assetPath);
+    const [showModal, setShowModal] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState(null);
+    const handleDelete = (item) => {
+        setItemToDelete(item)
+        setShowModal(true);
+    }
+
+    const confirmDelete = () => {
+        router.delete(route('sampah.destroy', itemToDelete.id), {
+            onSuccess: () => {
+                setShowModal(false)
+            }
+        })
+    }
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -14,7 +30,8 @@ export default function DataSampah({ auth, title, dataSampah, assetPath }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-4">
-                        <div className="btn btn-primary mb-3" onClick={() => document.getElementById('my_modal_3').showModal()}>Tambah Data</div>
+                        <Link className='btn btn-primary mb-3' href={route('sampah.create')}>Tambah Data</Link>
+                        {/* <div className="btn btn-primary mb-3" onClick={() => document.getElementById('my_modal_3').showModal()}>Tambah Data</div> */}
                         <table id='myTable' className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
                             <thead className='text-xs text-gray-700 uppercase dark:text-gray-400'>
                                 <tr>
@@ -27,37 +44,32 @@ export default function DataSampah({ auth, title, dataSampah, assetPath }) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {dataSampah && dataSampah.map((sampah, index)=>{
-                                    return(
-                                    <tr key={sampah.id}>
-                                    <td className='border p-2'>{index+1}</td>
-                                    <td className='border p-2'>{sampah.jenis_sampah}</td>
-                                    <td className='border p-2'>{sampah.deskripsi}</td>
-                                    <td className='border p-2'>Rp. {sampah.harga}</td>
-                                    <td className='border p-2'>
-                                        <img src={assetPath+'/'+sampah.foto} alt="" />
-                                    </td>
-                                    <td className='border p-2'>
-                                        <div className="flex">
-                                            <div className="btn btn-warning mx-2">Edit</div>
-                                            <div className="btn btn-error mx-2">Hapus</div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                {dataSampah && dataSampah.map((sampah, index) => {
+                                    return (
+                                        <tr key={sampah.id}>
+                                            <td className='border p-2'>{index + 1}</td>
+                                            <td className='border p-2'>{sampah.jenis_sampah}</td>
+                                            <td className='border p-2'>{sampah.deskripsi}</td>
+                                            <td className='border p-2'>Rp. {sampah.harga}</td>
+                                            <td className='border p-2'>
+                                                <img src={assetPath + '/' + sampah.foto} alt="" />
+                                            </td>
+                                            <td className='border p-2'>
+                                                <div className="flex">
+                                                    <div className="btn btn-warning mx-2">Edit</div>
+                                                    <div className="btn btn-error mx-2" onClick={() => handleDelete(sampah)}>Hapus</div>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     )
                                 })}
                             </tbody>
                         </table>
+                        {itemToDelete && 
+                        <ConfirmationModal isOpen={showModal} onCancel={() => setShowModal(false)} onConfirmation={confirmDelete} data={itemToDelete.jenis_sampah} />
+                        }
                     </div>
                 </div>
-                <dialog id="my_modal_3" className="modal">
-                    <div className="modal-box bg-white">
-                        <form method="dialog">
-                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                        </form>
-                        <Create/>
-                    </div>
-                </dialog>
             </div>
         </AuthenticatedLayout>
     );

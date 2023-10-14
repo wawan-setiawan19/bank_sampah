@@ -27,7 +27,9 @@ class SampahController extends Controller
      */
     public function create()
     {
-        
+        return Inertia::render('Sampah/Create',[
+            'title' => 'Data Baru'
+        ]);
     }
 
     /**
@@ -92,8 +94,11 @@ class SampahController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sampah $sampah)
+    public function destroy($id)
     {
-        //
+        $sampah = Sampah::find($id);
+        $sampah->delete();
+        // $mobil->delete();
+        return redirect(route('sampah'));
     }
 }
