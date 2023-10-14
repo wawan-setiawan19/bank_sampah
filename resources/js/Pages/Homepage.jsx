@@ -9,7 +9,8 @@ const Homepage = (props) => {
             <div className="hero-content text-center text-neutral-content">
                 <div className="max-w-md">
                     <p className="mb-5">Jangan pandang sampahmu tidak berguna, kamu sekarang bisa jadikan sampahmu menjadi uang tambahan</p>
-                    <Link href={route('login')} className="btn btn-warning text-info-content w-full">Setor Sampah</Link>
+                    <Link href={route('setor')} className="btn btn-warning text-info-content w-full">Hitung Sampah</Link>
+                    <Link href={route('login')} className="btn btn-warning text-info-content w-full mt-3">Login Admin</Link>
                 </div>
             </div>
         </div>

@@ -22,6 +22,15 @@ class SampahController extends Controller
         ]);
     }
 
+    public function setor()
+    {
+        $dataSampah = Sampah::all();
+        return Inertia::render('SetorSampah',[
+            'sampah' => $dataSampah,
+            'title' => 'Kalkulator',
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
